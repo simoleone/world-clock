@@ -58,13 +58,6 @@ const ClockWrapper = styled.div`
 
 const TimeZoneText = styled.span`
   color: white;
-  //position: absolute;
-  //top: 160px;
-  //
-  //left: 0;
-  //right: 0;
-  //margin-left: auto;
-  //margin-right: auto;
 `;
 
 const CurrentTimeText = styled.span`
@@ -85,7 +78,6 @@ const CountryFlag = styled(ReactCountryFlag)`
     width: ${(4 / 3) * 1}em !important;
   }
 `;
-console.log(moment);
 
 const ZonedClock = ({ now, tz, city, country }) => {
   let nowZoned = now.clone().tz(tz);
@@ -110,6 +102,18 @@ ZonedClock.propTypes = {
   now: PropTypes.instanceOf(moment).isRequired,
   tz: PropTypes.string.isRequired,
 };
+
+const FullScreenNotice = styled.span`
+  position: fixed;
+  top: 5px;
+  left: 5px;
+  color: white;
+  font-size: 0.5em;
+
+  html:fullscreen & {
+    display: none;
+  }
+`;
 
 function App() {
   const [now, setNow] = useState(moment());
@@ -137,6 +141,7 @@ function App() {
 
   return (
     <div>
+      <FullScreenNotice>Go full screen! (Command + Enter)</FullScreenNotice>
       <Container fluid>
         <Row>
           <DaylightMap />
