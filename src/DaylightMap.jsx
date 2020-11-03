@@ -1,7 +1,7 @@
-import { Graticule, Mercator } from "@visx/geo";
+import { Graticule } from "@visx/geo";
 import NaturalEarth from "@visx/geo/lib/projections/NaturalEarth";
 import { geoCircle } from "d3-geo";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import * as solar from "solar-calculator";
 import * as topojson from "topojson-client";
 import topology from "./world-topo.json";
@@ -19,7 +19,19 @@ const sunPosition = (now) => {
 
 const antipode = ([longitude, latitude]) => [longitude + 180, -latitude];
 
-export function DaylightMap({ now }) {
+const UPDATE_INTERVAL_MS = 60000;
+
+export function DaylightMap() {
+  const [now, setNow] = useState(new Date());
+
+  useEffect(() => {
+    const interval = setInterval(() => setNow(new Date()), UPDATE_INTERVAL_MS);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
   const sun = sunPosition(now);
   const night = geoCircle().radius(90).center(antipode(sun))();
 

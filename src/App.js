@@ -85,6 +85,7 @@ const CountryFlag = styled(ReactCountryFlag)`
     width: ${(4 / 3) * 1}em !important;
   }
 `;
+console.log(moment);
 
 const ZonedClock = ({ now, tz, city, country }) => {
   let nowZoned = now.clone().tz(tz);
@@ -93,7 +94,11 @@ const ZonedClock = ({ now, tz, city, country }) => {
     <ClockWrapper>
       <CurrentTimeText>{nowZoned.format("HH:mm")}</CurrentTimeText>
       {/*<TimeZoneText>{nowZoned.format("z")}</TimeZoneText>*/}
-      <Clock value={nowZoned.format("HH:mm:ss")} size={200} />
+      <Clock
+        value={nowZoned.format("HH:mm:ss")}
+        size={200}
+        renderSecondHand={false}
+      />
       <TimeZoneText>{city}</TimeZoneText>
       &nbsp;
       <CountryFlag svg countryCode={country} />
@@ -131,19 +136,21 @@ function App() {
   });
 
   return (
-    <>
-      <DaylightMap now={now} />
-      <Container>
+    <div>
+      <Container fluid>
         <Row>
+          <DaylightMap />
+        </Row>
+
+        <Row style={{ marginTop: "2em" }}>
           {LOCATIONS.map((location) => (
             <Col className="d-flex justify-content-center" key={location.tz}>
               <ZonedClock now={now} {...location} />
             </Col>
           ))}
         </Row>
-        <Row></Row>
       </Container>
-    </>
+    </div>
   );
 }
 
