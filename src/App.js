@@ -1,5 +1,6 @@
 import useEventListener from "@use-it/event-listener";
 import moment from "moment-timezone/builds/moment-timezone-with-data";
+import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
@@ -8,7 +9,6 @@ import _Clock from "react-clock";
 import "react-clock/dist/Clock.css";
 import ReactCountryFlag from "react-country-flag";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import { DaylightMap } from "./DaylightMap";
 
 const LOCATIONS = [
@@ -80,7 +80,7 @@ const CountryFlag = styled(ReactCountryFlag)`
 `;
 
 const ZonedClock = ({ now, tz, city, country }) => {
-  let nowZoned = now.clone().tz(tz);
+  const nowZoned = now.clone().tz(tz);
 
   return (
     <ClockWrapper>
@@ -119,7 +119,18 @@ function App() {
   const [now, setNow] = useState(moment());
 
   useEffect(() => {
-    const interval = setInterval(() => setNow(moment()), 1000);
+    const interval = setInterval(
+      () =>
+        setNow((prevNow) => {
+          const newNow = moment().startOf("minute");
+          if (newNow.isSame(prevNow)) {
+            return prevNow;
+          } else {
+            return newNow;
+          }
+        }),
+      1000
+    );
 
     return () => {
       clearInterval(interval);
@@ -144,7 +155,7 @@ function App() {
       <FullScreenNotice>Go full screen! (Command + Enter)</FullScreenNotice>
       <Container fluid>
         <Row>
-          <DaylightMap />
+          <DaylightMap now={now} />
         </Row>
 
         <Row style={{ marginTop: "2em" }}>
