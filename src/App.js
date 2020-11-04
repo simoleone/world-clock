@@ -18,11 +18,6 @@ const LOCATIONS = [
     country: "US",
   },
   {
-    tz: "America/Chicago",
-    city: "Chicago",
-    country: "US",
-  },
-  {
     tz: "America/New_York",
     city: "New York",
     country: "US",
@@ -30,6 +25,11 @@ const LOCATIONS = [
   {
     tz: "UTC",
     city: "UTC",
+    country: "_",
+  },
+  {
+    tz: "Europe/London",
+    city: "London",
     country: "GB",
   },
   {
@@ -40,6 +40,11 @@ const LOCATIONS = [
 ];
 
 const Clock = styled(_Clock)`
+  & {
+    height: unset !important;
+    width: 20vh !important;
+    padding-top: 20vh;
+  }
   & .react-clock__face {
     border-color: white;
   }
@@ -58,18 +63,13 @@ const ClockWrapper = styled.div`
 
 const TimeZoneText = styled.span`
   color: white;
+  display: block;
 `;
 
 const CurrentTimeText = styled.span`
   color: white;
   font-size: 1.25em;
-  position: absolute;
-  top: 140px;
-
-  left: 0;
-  right: 0;
-  margin-left: auto;
-  margin-right: auto;
+  display: block;
 `;
 
 const CountryFlag = styled(ReactCountryFlag)`
@@ -77,6 +77,13 @@ const CountryFlag = styled(ReactCountryFlag)`
     height: 1em !important;
     width: ${(4 / 3) * 1}em !important;
   }
+  position: absolute;
+  bottom: 5em;
+
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
 `;
 
 const ZonedClock = ({ now, tz, city, country }) => {
@@ -84,16 +91,14 @@ const ZonedClock = ({ now, tz, city, country }) => {
 
   return (
     <ClockWrapper>
-      <CurrentTimeText>{nowZoned.format("HH:mm")}</CurrentTimeText>
-      {/*<TimeZoneText>{nowZoned.format("z")}</TimeZoneText>*/}
       <Clock
         value={nowZoned.format("HH:mm:ss")}
         size={200}
         renderSecondHand={false}
       />
-      <TimeZoneText>{city}</TimeZoneText>
-      &nbsp;
       <CountryFlag svg countryCode={country} />
+      <TimeZoneText>{city}</TimeZoneText>
+      <CurrentTimeText>{nowZoned.format("HH:mm")}</CurrentTimeText>
     </ClockWrapper>
   );
 };

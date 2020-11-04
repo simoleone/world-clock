@@ -1,6 +1,7 @@
 import { Graticule } from "@visx/geo";
 import NaturalEarth from "@visx/geo/lib/projections/NaturalEarth";
 import { geoCircle } from "d3-geo";
+import { useLayoutEffect, useState } from "react";
 import * as solar from "solar-calculator";
 import * as topojson from "topojson-client";
 import topology from "./world-topo.json";
@@ -19,15 +20,22 @@ const sunPosition = (now) => {
 const antipode = ([longitude, latitude]) => [longitude + 180, -latitude];
 
 export function DaylightMap({ now }) {
+  const [size, setSize] = useState([0, 0]);
   const sun = sunPosition(now);
   const night = geoCircle().radius(90).center(antipode(sun))();
 
-  const height = Math.floor(window.innerHeight / 1.5);
-  const width = window.innerWidth;
+  useLayoutEffect(() => {
+    function updateSize() {
+      setSize([window.innerWidth, Math.floor(window.innerHeight / 1.5)]);
+    }
+    window.addEventListener("resize", updateSize);
+    updateSize();
+    return () => window.removeEventListener("resize", updateSize);
+  }, []);
 
   return (
-    <svg width={width} height={height}>
-      <NaturalEarth data={world.features} fitSize={[[width, height], world]}>
+    <svg width={size[0]} height={size[1]}>
+      <NaturalEarth data={world.features} fitSize={[size, world]}>
         {(mercator) => (
           <g>
             <Graticule
