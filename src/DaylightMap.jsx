@@ -18,7 +18,7 @@ const sunPosition = (now) => {
 
 const antipode = ([longitude, latitude]) => [longitude + 180, -latitude];
 
-export function DaylightMap(now) {
+export function DaylightMap({ now }) {
   const sun = sunPosition(now);
   const night = geoCircle().radius(90).center(antipode(sun))();
 

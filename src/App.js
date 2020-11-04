@@ -155,7 +155,7 @@ function App() {
       <FullScreenNotice>Go full screen! (Command + Enter)</FullScreenNotice>
       <Container fluid>
         <Row>
-          <DaylightMap now={now} />
+          <DaylightMap now={now.toDate()} />
         </Row>
 
         <Row style={{ marginTop: "2em" }}>
