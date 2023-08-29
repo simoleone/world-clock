@@ -1,6 +1,6 @@
 {
   "name": "world-clock",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "homepage": "https://simoleone.github.io/world-clock",
   "dependencies": {

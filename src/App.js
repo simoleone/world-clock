@@ -25,7 +25,7 @@ const LOCATIONS = [
   {
     tz: "UTC",
     city: "UTC",
-    country: "_",
+    country: null,
   },
   {
     tz: "Europe/London",
@@ -96,7 +96,7 @@ const ZonedClock = ({ now, tz, city, country }) => {
         size={200}
         renderSecondHand={false}
       />
-      <CountryFlag svg countryCode={country} />
+      {country ? (<CountryFlag svg countryCode={country} />) : null }
       <TimeZoneText>{city}</TimeZoneText>
       <CurrentTimeText>{nowZoned.format("HH:mm")}</CurrentTimeText>
     </ClockWrapper>
